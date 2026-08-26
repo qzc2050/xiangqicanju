@@ -3,6 +3,8 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // GitHub Actions 部署到 Pages 时使用仓库子路径
+  base: process.env.GITHUB_ACTIONS ? '/xiangqicanju/' : '/',
   plugins: [
     react(),
     VitePWA({
@@ -17,6 +19,8 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
         lang: 'zh-CN',
+        start_url: '.',
+        scope: '.',
         icons: [
           {
             src: 'favicon.svg',
@@ -29,6 +33,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,json,ico,woff2,wasm,data}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        navigateFallback: 'index.html',
       },
     }),
   ],

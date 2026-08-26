@@ -27,7 +27,7 @@ function parseMoves(list: string[] | undefined): Move[] {
 
 function ensureWorker(): Worker {
   if (!worker) {
-    worker = new Worker('/wasm/pikafish-worker.js')
+    worker = new Worker(`${import.meta.env.BASE_URL}wasm/pikafish-worker.js`)
     worker.onmessage = (ev: MessageEvent) => {
       const data = ev.data as {
         id: number
