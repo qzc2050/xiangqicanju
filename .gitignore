@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OCR / book data (local only)
+mydata/
+.venv-ocr/
+*.pdf
