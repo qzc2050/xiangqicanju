@@ -57,7 +57,7 @@ def p(side: str, kind: str, rank: int, file: int) -> tuple[str, str, int, int]:
 UPDATES: dict[str, tuple[str, str | None]] = {
     # id -> (fen, bookNo suffix like '·图18' or None to keep bookNo)
     # === 原本·马类 o-m-02..24 (skip o-m-01) ===
-    'o-m-02': (build_fen([p('black','A',0,5),p('black','A',2,4),p('black','K',2,5),p('red','N',4,1),p('red','K',9,4)]), '·图2'),
+    'o-m-02': (build_fen([p('black','A',1,5),p('black','A',2,4),p('black','K',2,5),p('red','N',3,1),p('red','K',9,6)]), '·图2'),
     'o-m-03': (build_fen([p('black','K',0,4),p('black','B',2,3),p('red','N',3,9),p('red','K',9,5)]), '·图3'),
     'o-m-04': (build_fen([p('black','K',1,6),p('red','N',3,6),p('black','B',4,3),p('red','K',9,5)]), '·图4'),
     'o-m-05': (build_fen([p('black','K',1,6),p('black','P',3,3),p('red','N',7,9),p('red','K',9,5)]), '·图5'),
@@ -173,6 +173,42 @@ UPDATES: dict[str, tuple[str, str | None]] = {
 
 SKIP = {'o-m-01', 'x-k-01', 'x-k-02', 'x-k-03', 'x-k-04', 'x-k-05', 'x-k-06', 'x-k-07'}
 
+# 引擎 rank0=红底。士五格 / 象七格 / 将九宫。
+_ADVISOR = {
+    'red': {(3, 0), (5, 0), (4, 1), (3, 2), (5, 2)},
+    'black': {(3, 9), (5, 9), (4, 8), (3, 7), (5, 7)},
+}
+_ELEPHANT = {
+    'red': {(2, 0), (6, 0), (0, 2), (4, 2), (8, 2), (2, 4), (6, 4)},
+    'black': {(2, 9), (6, 9), (0, 7), (4, 7), (8, 7), (2, 5), (6, 5)},
+}
+
+
+def fen_kae_legal(fen: str) -> bool:
+    """将/士/象是否都在合法格。FEN 首行=黑底。"""
+    board = fen.split()[0].split('/')
+    if len(board) != 10:
+        return False
+    for i, row in enumerate(board):
+        rank = 9 - i
+        file = 0
+        for ch in row:
+            if ch.isdigit():
+                file += int(ch)
+                continue
+            side = 'red' if ch.isupper() else 'black'
+            kind = ch.upper()
+            if kind == 'K':
+                ok = 3 <= file <= 5 and (rank <= 2 if side == 'red' else rank >= 7)
+                if not ok:
+                    return False
+            elif kind == 'A' and (file, rank) not in _ADVISOR[side]:
+                return False
+            elif kind == 'B' and (file, rank) not in _ELEPHANT[side]:
+                return False
+            file += 1
+    return True
+
 
 def patch_catalog() -> int:
     text = CATALOG.read_text(encoding='utf-8')
@@ -190,6 +226,8 @@ def patch_catalog() -> int:
             continue
         if m.group(2) == fen:
             pass
+        elif fen_kae_legal(m.group(2)) and not fen_kae_legal(fen):
+            print(f'skip {pid}: catalog 将士象已合法，不写回旧 FEN')
         else:
             text = text[: m.start(2)] + fen + text[m.end(2) :]
             count += 1
@@ -222,7 +260,7 @@ def main() -> None:
         capture_output=True,
         text=True,
     )
-    bad = [ln for ln in r.stdout.splitlines() if 'BAD FEN' in ln or 'NO MOVES' in ln]
+    bad = [ln for ln in r.stdout.splitlines() if 'BAD FEN' in ln or 'NO MOVES' in ln or 'ILLEGAL PLACE' in ln]
     if bad:
         print('Validation issues:', file=sys.stderr)
         for ln in bad:

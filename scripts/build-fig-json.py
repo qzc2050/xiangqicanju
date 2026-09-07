@@ -11,11 +11,11 @@ from pathlib import Path
 SPECS: dict[str, tuple[list[tuple[str, str, int, int]], str, str]] = {
     'fig2': (
         [
-            ('black', 'A', 0, 5),
+            ('black', 'A', 1, 5),
             ('black', 'A', 2, 4),
             ('black', 'K', 2, 5),
-            ('red', 'N', 4, 1),
-            ('red', 'K', 9, 4),
+            ('red', 'N', 3, 1),
+            ('red', 'K', 9, 6),
         ],
         'w',
         'page-017.png',

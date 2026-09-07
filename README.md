@@ -13,6 +13,8 @@ npm run dev
 
 首次进入对局会加载皮卡鱼引擎（约数 MB），建议 Wi‑Fi 下打开一次；之后可缓存离线使用。
 
+棋规与士/象/将合法落点见 [docs/xiangqi-rules.md](docs/xiangqi-rules.md)。改题库后请跑 `npx tsx scripts/validate-puzzles.ts`。
+
 ## 引擎说明
 
 - 对局/提示默认使用 [Pikafish](https://github.com/official-pikafish/Pikafish)（GPL-3.0）WebAssembly 版，本地计算、不连云端。

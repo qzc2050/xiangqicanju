@@ -19,5 +19,6 @@ export {
   isInCheck,
   isStalemate,
 } from './moves'
+export { placementIssues } from './placement'
 export type { Move, Piece, PieceKind, Position, Side, Square } from './types'
 export { FILES, PIECE_LABEL, RANKS, otherSide, sameSq, sqKey } from './types'
