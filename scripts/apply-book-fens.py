@@ -58,7 +58,7 @@ UPDATES: dict[str, tuple[str, str | None]] = {
     # id -> (fen, bookNo suffix like '·图18' or None to keep bookNo)
     # === 原本·马类 o-m-02..24 (skip o-m-01) ===
     'o-m-02': (build_fen([p('black','A',1,5),p('black','A',2,4),p('black','K',2,5),p('red','N',3,1),p('red','K',9,6)]), '·图2'),
-    'o-m-03': (build_fen([p('black','K',0,4),p('black','B',2,3),p('red','N',3,9),p('red','K',9,5)]), '·图3'),
+    'o-m-03': (build_fen([p('black','K',1,4),p('black','B',4,3),p('red','N',4,9),p('red','K',9,5)]), '·图3'),
     'o-m-04': (build_fen([p('black','K',1,6),p('red','N',3,6),p('black','B',4,3),p('red','K',9,5)]), '·图4'),
     'o-m-05': (build_fen([p('black','K',1,6),p('black','P',3,3),p('red','N',7,9),p('red','K',9,5)]), '·图5'),
     'o-m-06': (build_fen([p('black','K',0,5),p('black','P',4,5),p('red','N',6,9),p('red','K',9,5)]), '·图6'),

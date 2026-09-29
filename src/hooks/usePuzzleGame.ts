@@ -10,6 +10,7 @@ import {
   formatMoveChinese,
   generateLegalMoves,
   isCheckmate,
+  isStalemate,
   parseFen,
   sameSq,
   toFen,
@@ -83,20 +84,30 @@ export function usePuzzleGame(puzzle: Puzzle) {
 
   const finishIfMate = useCallback(
     (next: Position, side: Side = playerSide) => {
-      if (isCheckmate(next, next.sideToMove)) {
+      const mate = isCheckmate(next, next.sideToMove)
+      const stale = isStalemate(next, next.sideToMove)
+      if (mate || stale) {
         if (next.sideToMove !== side) {
           if (puzzle.goal === 'draw') {
             setStatus('lost')
-            setMessage('破和了：和局题不以将死为通关')
+            setMessage(mate ? '破和了：和局题不以将死为通关' : '破和了：和局题不以困毙为通关')
             return true
           }
           setStatus('won')
-          setMessage(side === puzzle.winSide ? '将死！通关' : '将死！（防守方练习）')
+          setMessage(
+            side === puzzle.winSide
+              ? mate
+                ? '将死！通关'
+                : '困毙！通关'
+              : mate
+                ? '将死！（防守方练习）'
+                : '困毙！（防守方练习）',
+          )
           maybeClear(side)
           return true
         }
         setStatus('lost')
-        setMessage('被将死了，再试一次')
+        setMessage(mate ? '被将死了，再试一次' : '困毙了，再试一次')
         return true
       }
       return false

@@ -65,10 +65,10 @@ export const PUZZLES: Puzzle[] = [
     title: '马胜单象（将象归边负）',
     category: '原本·马类',
     difficulty: 3,
-    fen: '2bk5/9/9/8N/9/9/9/9/9/4K4 w',
+    fen: '9/3k5/9/9/2b5N/9/9/9/9/4K4 w',
     winSide: 'red',
     goal: 'win',
-    tip: '将象同侧归边时可胜；控象眼、赶象出宫。',
+    tip: '马象同在河沿，将在宫左肋。先马一进三，吃象后困毙。',
   },
   {
     id: 'o-m-04',

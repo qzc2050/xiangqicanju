@@ -71,10 +71,8 @@ function alphabeta(
   const side = pos.sideToMove
   const moves = generateLegalMoves(pos, side)
   if (moves.length === 0) {
-    if (isInCheck(pos, side)) {
-      return side === perspective ? -90000 + (4 - depth) : 90000 - (4 - depth)
-    }
-    return 0
+    // 无子可走即负：被将军是将死，未将军是困毙
+    return side === perspective ? -90000 + (4 - depth) : 90000 - (4 - depth)
   }
   if (depth <= 0) return evalPos(pos, perspective)
 
